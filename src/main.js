@@ -3,23 +3,6 @@ const RecentFoldersPlugin = require("./plugins/RecentFolders/RecentFolders.js");
 const Jumplists = require("./plugins/Jumplists/Jumplists.js");
 const { dd, dump } = require("dumper.js");
 
-
-// const ignores = require("./ignores.js")
-/**
-
- Things I need to prep before the Product Meeting
- ====
- 
- - web-cam (Easier to get a web-cam than replacing the hp led screen)
- - Resume  
- - 
- 
- 
- 
- 
- 
- * @type {{}}
- */
 let recent = App({});
 
 // Hook up your plugins.
