@@ -1,0 +1,18 @@
+#############################################
+#  SAMPLE IGNORE FILE FOR @recent-cli/cli   #
+#############################################
+#
+#   Usage:
+# 
+#   This file should be placed in your user folder's root. 
+#   For e.g. %HOME%\.recentignore
+#
+#   Supports these glob features:
+#       - Brace Expansion
+#       - Extended glob matching
+#       - "Globstar" ** matching
+#
+#############################################
+
+c:\
+c:\windows\*
