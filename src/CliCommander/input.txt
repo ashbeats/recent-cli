@@ -1,0 +1,9 @@
+Usage: recent [options]
+
+Jump to Windows 10 system-wide recent folders on the CLI.
+
+Options:
+  -v, --version  output the version number
+  -f, --force    Quickly rebuild your recent folder index (default: false)
+  -e, --exclude  Path to .recentignore
+  -h, --help     Show help
