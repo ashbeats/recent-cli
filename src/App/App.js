@@ -5,15 +5,27 @@ const { existsSync, statSync } = require("fs");
 const fs = require("fs");
 
 const { dd } = require("dumper.js");
-
+const { RecentIndex, RecentIndexAge } = require("./utils.js");
 const pipe = require("lodash/fp/pipe.js");
-
+const cliInterface = require("../Cli/interface.js");
 // prettier-ignore
 const { flatten, uniq, mapFolderToFormat, 
-        sortMostRecentDate, filterExistsSync } = require("./utils.js");
-const { databaseWriter, rebuildAll, addPlugin } = require("./methods.js");
+        sortMostRecentDate, filterExistsSync, pushd } = require("./utils.js");
+const {
+  databaseWriter,
+  rebuildAll,
+  addPlugin,
+  startCli
+} = require("./methods.js");
 
-const App = _ => {
+const pathMaker = top => (internal = "/") => path.join(top, internal);
+
+const cleanupPrior = app => () =>
+  fs.existsSync(app.Path(".LAST_FOLDER"))
+    ? fs.unlinkSync(App.Path(".LAST_FOLDER"))
+    : null;
+
+const App = () => {
   let App = {};
 
   // #. Props + Meta
@@ -23,16 +35,32 @@ const App = _ => {
   App.installedPlugins = []; // just the name
 
   // #. storage paths, ignore paths
+  const p_root = fs.realpathSync(path.join(__dirname, "../../"));
+  const p_store = fs.realpathSync(path.join(p_root, "/store/"));
+  const p_src = fs.realpathSync(path.join(p_root, "/src/"));
+
+  App.Path = pathMaker(p_root);
+  App.PathStore = pathMaker(p_store);
+  App.PathSrc = pathMaker(p_src);
+
+  cleanupPrior(App);
+
+  // @deprecated App.config.dbPath
   App.config = {
-    dbPath: path.join(__dirname, "../../store/")
+    dbPath: p_store, // todo - deprecate this,
+    databasePath: App.PathStore("main-db.json")
   };
+
+  App.databaseExists = () => existsSync(App.config.databasePath);
+  App.database = RecentIndex(App.config.databasePath);
+  App.databaseAge = RecentIndexAge(App.config.databasePath);
 
   // #. Event Docks
   App.emitter = AppEmitter;
 
-  App.emitter.on("App.PluginInstalled", state => {
-    App.installedPlugins.push(state.name);
-  });
+  App.emitter.on("App.PluginInstalled", state =>
+    App.installedPlugins.push(state.name)
+  );
 
   const mergePipeline = pipe(
     flatten,
@@ -45,23 +73,31 @@ const App = _ => {
   );
 
   App.emitter.on("App.MergeData", mergePipeline);
-   
+
   App.eventNames = {
     RebuildCompletion: name => `${name}.onRebuildCompletion`,
     RebuildRequest: name => `${name}.onRebuildRequested`
   };
 
-  // # Attach methods.js
+  // # Attach methods
   App.rebuildAll = rebuildAll(App);
   App.add = addPlugin(App);
   App.databaseWriter = databaseWriter(App);
+  App.log = console.log;
+  App.cliLog = false;
 
-  App.start = () => {};
-  App.getData = () => {};
+  // dd(cliInterface(App));
+
+  App.pushd = pushd(App);
+
+  App.cli = cliInterface(App);
+  App.start = startCli(App);
+  App.loader = routine => routine();
 
   return App;
 };
 
+/** Don't destructure App to maintain reactivity for now */
 module.exports = {
   App
 };

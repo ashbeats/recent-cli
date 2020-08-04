@@ -1,4 +1,5 @@
-const { existsSync, statSync } = require("fs");
+const { existsSync, statSync, readFileSync } = require("fs");
+const humanizeDuration = require("humanize-duration");
 
 function flatten(o) {
   return o.reduce((p, v) => {
@@ -27,11 +28,38 @@ function mapFolderToFormat(o) {
   }));
 }
 
+
+
+
+const RecentIndex = location => () => {
+  return existsSync(location)
+    ? JSON.parse(readFileSync(location, "utf8")).map(e => e["folderPath"])
+    : false;
+};
+
+const RecentIndexAge = location => () => {
+  if (!existsSync(location)) return false;
+  const modTime = new Date(statSync(location)["mtimeMs"]);
+  return humanizeDuration(new Date() - modTime, {
+    round: true,
+    units: ["y", "mo", "w", "d", "h", "m"]
+  });
+};
+
+
+
+const pushd = app => folderPath =>
+    fs.writeFileSync(app.Path(".LAST_FOLDER"), folderPath);
+
+
 module.exports = {
   flatten,
   uniq,
   mapFolderToFormat,
   sort,
   filterExistsSync,
-  sortMostRecentDate: sort("mostRecentDate")
+  sortMostRecentDate: sort("mostRecentDate"),
+  RecentIndex,
+  RecentIndexAge,
+  pushd
 };

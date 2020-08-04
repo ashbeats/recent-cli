@@ -3,29 +3,20 @@ const RecentFoldersPlugin = require("./plugins/RecentFolders/RecentFolders.js");
 const Jumplists = require("./plugins/Jumplists/Jumplists.js");
 const { dd, dump } = require("dumper.js");
 
-let recent = App({});
+const fs = require("fs");
 
-// Hook up your plugins.
-recent.add(RecentFoldersPlugin);
-recent.add(Jumplists);
+process.on("exit", function(code) {});
 
-rebuild = true;
+const { whatCommand } = require("./WhatCommand.js");
+const args = process.argv;
 
-if (rebuild) {
-  recent.emitter.on("App.DatabaseReady", function(d) {
-    dd(d);
-  });
+try {
+  let recent = App(args);
 
-  recent.rebuildAll();
-}
-
-function Create(options) {
-  /*  db.dispatchRelay = (data_collected, channelName) => incomingData => {
-    // all scrapers completed.
-  }; */
-  // let cli = new RecentCli();
-  // cli.add(db);
-  // cli.interface(new RecentInterface());
-  // cli.begin();
-  // return manager;
+  // Hook up your plugins.
+  recent.add(RecentFoldersPlugin);
+  recent.add(Jumplists);
+  recent.start( false);
+} catch (e) {
+  console.error(e);
 }
