@@ -1,3 +1,5 @@
 node_modules/
 yarn-error.*
 store/*.json
+
+.LAST_FOLDER

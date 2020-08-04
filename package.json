@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "src/main-cli.js",
   "scripts": {
-    "compile": "./make.cmd"
+    "compile": "./make.cmd",
+    "recent": "src/bin/recent.cmd"
   },
   "preferGlobal": true,
   "bin": {
@@ -26,6 +27,7 @@
     "@recent-cli/expand-paths": "^0.0.3",
     "@recent-cli/jumplist-parser-lite": "^0.0.1",
     "@recent-cli/resolve-lnk": "^0.0.2",
+    "@types/chalk": "^2.2.0",
     "cfb": "^1.2.0",
     "chalk": "^4.1.0",
     "cli-progress": "^3.8.2",
@@ -36,10 +38,12 @@
     "faker": "^4.1.0",
     "humanize-duration": "^3.23.1",
     "inquirer": "^7.3.3",
+    "inquirer-search-list": "^1.2.6",
     "lodash": "^4.17.19",
     "minimatch": "^3.0.4",
     "minimist": "^1.2.5",
-    "n-readlines": "^1.0.0"
+    "n-readlines": "^1.0.0",
+    "rxjs": "^6.6.2"
   },
   "devDependencies": {
     "jest": "^26.1.0"
