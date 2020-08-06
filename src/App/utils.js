@@ -1,4 +1,6 @@
-const { existsSync, statSync, readFileSync } = require("fs");
+'use strict';
+
+const { existsSync, statSync, readFileSync, writeFileSync } = require("fs");
 const humanizeDuration = require("humanize-duration");
 
 function flatten(o) {
@@ -49,7 +51,7 @@ const RecentIndexAge = location => () => {
 
 
 const pushd = app => folderPath =>
-    fs.writeFileSync(app.Path(".LAST_FOLDER"), folderPath);
+    writeFileSync(app.Path(".LAST_FOLDER"), folderPath);
 
 
 module.exports = {

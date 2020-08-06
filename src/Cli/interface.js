@@ -24,7 +24,7 @@ function main(App) {
 
   function showMenu(menu) {
     process.stdout.write("\u001b[2J\u001b[0;0H");
-    print_PlainMenu();
+    print_HelpMenu();
     const prompts = create_prompt();
     prompts.next(menu);
   }

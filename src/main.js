@@ -7,7 +7,7 @@ const fs = require("fs");
 
 process.on("exit", function(code) {});
 
-const { whatCommand } = require("./WhatCommand.js");
+// const { whatCommand } = require("./WhatCommand.js");
 const args = process.argv;
 
 try {

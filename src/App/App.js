@@ -5,12 +5,16 @@ const { existsSync, statSync } = require("fs");
 const fs = require("fs");
 
 const { dd } = require("dumper.js");
-const { RecentIndex, RecentIndexAge } = require("./utils.js");
+
 const pipe = require("lodash/fp/pipe.js");
 const cliInterface = require("../Cli/interface.js");
+
+
 // prettier-ignore
 const { flatten, uniq, mapFolderToFormat, 
         sortMostRecentDate, filterExistsSync, pushd } = require("./utils.js");
+const { RecentIndex, RecentIndexAge } = require("./utils.js");
+
 const {
   databaseWriter,
   rebuildAll,
@@ -22,7 +26,7 @@ const pathMaker = top => (internal = "/") => path.join(top, internal);
 
 const cleanupPrior = app => () =>
   fs.existsSync(app.Path(".LAST_FOLDER"))
-    ? fs.unlinkSync(App.Path(".LAST_FOLDER"))
+    ? fs.unlinkSync(app.Path(".LAST_FOLDER"))
     : null;
 
 const App = () => {
@@ -43,7 +47,7 @@ const App = () => {
   App.PathStore = pathMaker(p_store);
   App.PathSrc = pathMaker(p_src);
 
-  cleanupPrior(App);
+  cleanupPrior(App)();
 
   // @deprecated App.config.dbPath
   App.config = {
@@ -86,10 +90,7 @@ const App = () => {
   App.log = console.log;
   App.cliLog = false;
 
-  // dd(cliInterface(App));
-
   App.pushd = pushd(App);
-
   App.cli = cliInterface(App);
   App.start = startCli(App);
   App.loader = routine => routine();
